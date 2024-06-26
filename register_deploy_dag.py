@@ -36,18 +36,18 @@ def deploy_dag(session: Session) -> str:
         "MODEL_TRAINING_DAG",
         # We could schedule this to run every Monday at 8:00 AM EST.
         # schedule=Cron("0 8 * * 1", "America/New_York"),
-        warehouse="COMPUTE_WH",
+        warehouse="WH_XS",
         stage_location="@PYTHON_CODE",
     ) as dag:
         load_task = DAGTask(
             name="LOAD_DATA_TASK",
             definition="CALL COMMON.LOAD_DIAMONDS_DATA();",
-            warehouse="COMPUTE_WH",
+            warehouse="WH_XS",
         )
         train_task = DAGTask(
             name="TRAIN_MODEL_TASK",
             definition="CALL COMMON.TRAIN_DIAMONDS_MODEL();",
-            warehouse="COMPUTE_WH",
+            warehouse="WH_XS",
         )
         load_task >> train_task
     schema = root.databases[session.get_current_database()].schemas[
